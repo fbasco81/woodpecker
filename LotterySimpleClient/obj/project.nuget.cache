@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "hFGFh1R5VtBy0a2sjEtL/QsvU76BrC+jqEZSCPaQkk4MrB78zqxRwcr1GIu8QeQgjZTmEdcU2ID4rPPijdJXYg==",
+  "success": true,
+  "projectFilePath": "D:\\Repos\\woodpecker\\LotterySimpleClient\\LotterySimpleClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\franc\\.nuget\\packages\\system.text.json\\5.0.1\\system.text.json.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
