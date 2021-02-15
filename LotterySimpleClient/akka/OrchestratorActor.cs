@@ -11,7 +11,7 @@ namespace LotterySimpleClient.Akka
 {
     public class OrchestratorActor : ReceiveActor
     {
-       private int _luckyNumbers = 0;
+       private int _receivedLuckyNumbers = 0;
        private int _howMany;
        private IActorRef _workerActor;
         public OrchestratorActor(int howMany)
@@ -24,23 +24,29 @@ namespace LotterySimpleClient.Akka
             httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
            
-            var props = Props.Create<LotteryActorWorker>(httpClient).WithRouter(new RoundRobinPool(10));
-            _workerActor = Context.ActorOf(props, "worker");
+            var props = Props.Create<LotteryActorWorker>(httpClient).WithRouter(new RoundRobinPool(Config.MaxDegreeOfParallelism));
+            _workerActor = Context.ActorOf(props);
             
         }
         private void Initialize()
         {
             Receive<Start>(message => 
             {
-                for (var i=0; i<_howMany; i++){
+                var startingBatchSize = (_howMany > Config.MaxDegreeOfParallelism * 20 
+                    ? Config.MaxDegreeOfParallelism * 20 
+                    : _howMany);
+                for (var i=0; i<startingBatchSize; i++){
                     _workerActor.Tell(new AskForNumbers());
                 }
             });
 
             Receive<NumbersReceived>(message => 
             {
-                _luckyNumbers ++;
-                if (_luckyNumbers == _howMany){
+                _receivedLuckyNumbers++;
+                if (_receivedLuckyNumbers < _howMany){
+                    _workerActor.Tell(new AskForNumbers());
+                }
+                else if (_receivedLuckyNumbers == _howMany){
                     Context.System.Terminate();
                 }
             });
