@@ -27,7 +27,7 @@ namespace LotterySimpleClient.Akka
         {
             Receive<AskForNumbers>(message => 
             {
-                _httpClient.GetStringAsync("https://localhost:5001/WeatherForecast").ContinueWith(httpRequest =>
+                _httpClient.GetStringAsync(Config.ApiUrl).ContinueWith(httpRequest =>
                 {
                     if (httpRequest.IsFaulted){
                         Console.WriteLine("Error");

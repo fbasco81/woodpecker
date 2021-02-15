@@ -735,25 +735,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\franc\\.nuget\\packages\\": {}
+    "C:\\Users\\francesco.basco\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repos\\woodpecker\\LotteryApi\\LotteryApi.csproj",
+      "projectUniqueName": "C:\\work\\woodpecker\\LotteryApi\\LotteryApi.csproj",
       "projectName": "LotteryApi",
-      "projectPath": "D:\\Repos\\woodpecker\\LotteryApi\\LotteryApi.csproj",
-      "packagesPath": "C:\\Users\\franc\\.nuget\\packages\\",
-      "outputPath": "D:\\Repos\\woodpecker\\LotteryApi\\obj\\",
+      "projectPath": "C:\\work\\woodpecker\\LotteryApi\\LotteryApi.csproj",
+      "packagesPath": "C:\\Users\\francesco.basco\\.nuget\\packages\\",
+      "outputPath": "C:\\work\\woodpecker\\LotteryApi\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\franc\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\francesco.basco\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {}
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {},
+        "https://msc-dev.pkgs.visualstudio.com/_packaging/MSCNA/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
@@ -798,7 +805,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

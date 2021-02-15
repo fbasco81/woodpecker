@@ -13,14 +13,17 @@ namespace LotterySimpleClient
         private static readonly HttpClient client = new HttpClient();
         static async Task Main(string[] args)
         {
-            
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
             // SimpleRepeat(1);
             // ParallelRepeat(1);
             // LotteryActorSystem.Run(1);
 
-             SimpleRepeat(10000);
-             ParallelRepeat(10000);
-            await LotteryActorSystem.Run(10000);
+            await SimpleRepeat(3000);
+            await ParallelTask(3000);
+            await ParallelByBuckets(3000);
+            await LotteryActorSystem.Run(3000);
 
             // SimpleRepeat(50000);
             // ParallelRepeat(50000);
@@ -28,22 +31,23 @@ namespace LotterySimpleClient
 
         }
 
-        private static void SimpleRepeat(int howMany){
-            Console.WriteLine($"Start SimpleRepeat for {howMany} times");
-
+        private static async Task SimpleRepeat(int howMany){
+            
+            ConsoleUtils.PrintBeginHeader("SimpleRepeat", howMany);
+            
             var stopwatch = new System.Diagnostics.Stopwatch(); 
             stopwatch.Start();
             for (var i=0; i<howMany; i++){
-                var result = GetLuckyNumber().Result;
+                var result = await GetLuckyNumber();
             }
             stopwatch.Stop();
-            Console.WriteLine($"End SimpleRepeat for {howMany} time. Elapsed {stopwatch.Elapsed}");
-            
+
+            ConsoleUtils.PrintEndHeader("SimpleRepeat", howMany, stopwatch);
         }
 
-        private static async void ParallelRepeat(int howMany){
-            Console.WriteLine($"Start ParallelRepeat for {howMany} times");
-
+        private static async Task ParallelTask(int howMany){
+            ConsoleUtils.PrintBeginHeader("ParallelRepeat", howMany);
+            
             var stopwatch = new System.Diagnostics.Stopwatch(); 
             stopwatch.Start();
             
@@ -51,26 +55,57 @@ namespace LotterySimpleClient
                         .Select(i => GetLuckyNumber());
             await Task.WhenAll(tasks);
 
-            // Parallel.For(0,howMany, (a) => {
-            //     var result = GetLuckyNumber().Result;
+            stopwatch.Stop();
+            ConsoleUtils.PrintEndHeader("ParallelRepeat", howMany, stopwatch);
+            
+        }
 
-            // });
+        private static async Task ParallelByBuckets(int howMany){
+            ConsoleUtils.PrintBeginHeader("ParallelByBuckets", howMany);
+            
+            var stopwatch = new System.Diagnostics.Stopwatch(); 
+            stopwatch.Start();
+            
+            // Divide into groups.	
+            var parallelGroups = Enumerable.Range(0, howMany)
+                                            .GroupBy(r => (r % Config.MaxDegreeOfParallelism));	
+            var parallelTasks = parallelGroups.Select(groups =>	
+            {	    
+                return Task.Run(async () =>
+                {
+                    foreach (var i in groups)
+                    {
+                        await GetLuckyNumber();
+                    }
+                });	
+            });	
+            await Task.WhenAll(parallelTasks);
+
+            stopwatch.Stop();
+            ConsoleUtils.PrintEndHeader("ParallelByBuckets", howMany, stopwatch);
+            
+        }
+
+        private static void ParallelFor(int howMany){
+            ConsoleUtils.PrintBeginHeader("ParallelFor", howMany);
+            
+            var stopwatch = new System.Diagnostics.Stopwatch(); 
+            stopwatch.Start();
+            
+            Parallel.For(0,howMany, async (a) => {
+                 var result = await GetLuckyNumber();
+
+            });
             
             stopwatch.Stop();
-            Console.WriteLine($"End ParallelRepeat for {stopwatch.Elapsed} time. Elapsed {stopwatch.Elapsed}");
+            ConsoleUtils.PrintEndHeader("ParallelFor", howMany, stopwatch);
             
         }
 
         private static async Task<string> GetLuckyNumber()
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-            //client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
-
-            var stringTask = client.GetStringAsync("https://localhost:5001/WeatherForecast");
-
-    var msg = await stringTask;
+            var stringTask = client.GetStringAsync(Config.ApiUrl);
+            var msg = await stringTask;
             return msg;
         }
     }

@@ -28,10 +28,6 @@ namespace LotterySimpleClient.Akka
             _workerActor = Context.ActorOf(props, "worker");
             
         }
-
-        /// <summary>
-        /// Used to define all of our <see cref="Receive"/> hooks for <see cref="HttpDownloaderActor"/>
-        /// </summary>
         private void Initialize()
         {
             Receive<Start>(message => 

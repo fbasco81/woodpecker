@@ -15,8 +15,8 @@ namespace LotterySimpleClient.Akka
              var stopwatch = new System.Diagnostics.Stopwatch(); 
             stopwatch.Start();
            
-            Console.WriteLine($"Start AkkaProcessing for {howMany} times");
-
+            ConsoleUtils.PrintBeginHeader("AkkaProcessing", howMany);
+            
             myLotteryActorSystem = ActorSystem.Create("MyLotteryActorSystem");
 
             var propsOrchestrator = Props.Create<OrchestratorActor>(howMany);
@@ -25,7 +25,7 @@ namespace LotterySimpleClient.Akka
             await myLotteryActorSystem.WhenTerminated;
             
             stopwatch.Stop();
-            Console.WriteLine($"End AkkaProcessing for {howMany} time. Elapsed {stopwatch.Elapsed}");
+            ConsoleUtils.PrintEndHeader("AkkaProcessing", howMany, stopwatch);
 
         }
     }
