@@ -32,10 +32,13 @@ namespace LotterySimpleClient.Akka
         {
             Receive<Start>(message => 
             {
-                var startingBatchSize = (_howMany > Config.MaxDegreeOfParallelism * 20 
-                    ? Config.MaxDegreeOfParallelism * 20 
-                    : _howMany);
-                for (var i=0; i<startingBatchSize; i++){
+                // var startingBatchSize = (_howMany > Config.MaxDegreeOfParallelism * 20 
+                //     ? Config.MaxDegreeOfParallelism * 20 
+                //     : _howMany);
+                // for (var i=0; i<startingBatchSize; i++){
+                //     _workerActor.Tell(new AskForNumbers());
+                // }
+                for (var i=0; i<_howMany; i++){
                     _workerActor.Tell(new AskForNumbers());
                 }
             });
@@ -43,10 +46,12 @@ namespace LotterySimpleClient.Akka
             Receive<NumbersReceived>(message => 
             {
                 _receivedLuckyNumbers++;
-                if (_receivedLuckyNumbers < _howMany){
-                    _workerActor.Tell(new AskForNumbers());
-                }
-                else if (_receivedLuckyNumbers == _howMany){
+                // if (_receivedLuckyNumbers < _howMany){
+                //     _workerActor.Tell(new AskForNumbers());
+                // }
+                //else
+                if (_receivedLuckyNumbers == _howMany){
+                    Console.WriteLine("Terminate");
                     Context.System.Terminate();
                 }
             });

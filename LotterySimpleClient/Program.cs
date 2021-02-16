@@ -22,7 +22,7 @@ namespace LotterySimpleClient
 
             //await SimpleRepeat(3000);
             //await ParallelTask(3000);
-            await ParallelByBuckets(3000);
+            //await ParallelByBuckets(3000);
             await LotteryActorSystem.Run(3000);
 
             // SimpleRepeat(50000);
