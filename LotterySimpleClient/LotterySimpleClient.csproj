@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Akka" Version="1.4.16" />
+    <PackageReference Include="Akka.Cluster" Version="1.4.16" />
     <PackageReference Include="Akka.Monitoring" Version="1.1.0" />
     <PackageReference Include="Akka.Monitoring.PerformanceCounters" Version="1.1.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
